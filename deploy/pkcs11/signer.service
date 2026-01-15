@@ -1,0 +1,32 @@
+# Example systemd unit for running an external signer wrapper.
+# This is a template — adapt paths, user, and hardening for your environment.
+
+[Unit]
+Description=LAP External Signer (PKCS#11 wrapper)
+After=network.target
+
+[Service]
+Type=simple
+User=lap-signer
+Group=lap-signer
+EnvironmentFile=/etc/lap/signer.env
+WorkingDirectory=/opt/lap
+# Example: expose an HTTP signer service you run yourself, or keep as command invoked by gateway.
+# This unit is illustrative; many deployments will run a container instead.
+
+ExecStart=/usr/bin/python3 /opt/lap/deploy/pkcs11/pkcs11_signer.py --module ${PKCS11_MODULE} --slot ${PKCS11_SLOT} --key-id ${PKCS11_KEY_ID}
+
+# Hardening suggestions:
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/tmp
+CapabilityBoundingSet=
+LockPersonality=true
+
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

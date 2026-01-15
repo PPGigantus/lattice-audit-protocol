@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-gateway
+  namespace: lap-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: lap-gateway
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        # Allow ingress from an ingress controller in the same namespace (if you run one here)
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: lap-ingress
+        # Allow health/ops from within namespace (tighten as needed)
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: lap
+      ports:
+        - protocol: TCP
+          port: 8000
+  egress:
+    # Allow DNS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Allow egress to tools (labelled app=lap-tool)
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: lap-tool
+      ports:
+        - protocol: TCP
+          port: 9000

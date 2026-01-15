@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lap-gateway
+  namespace: lap-system
+  labels:
+    app.kubernetes.io/name: lap-gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: lap-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: lap-gateway
+    spec:
+      containers:
+        - name: lap-gateway
+          image: your-registry/lap-gateway:1.0.7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: lap-gateway-config
+            - secretRef:
+                name: lap-gateway-secrets
+          readinessProbe:
+            httpGet:
+              path: /v1/health
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /v1/health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"

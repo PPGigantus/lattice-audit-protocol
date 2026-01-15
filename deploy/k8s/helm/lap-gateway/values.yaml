@@ -1,0 +1,48 @@
+image:
+  repository: your-registry/lap-gateway
+  tag: "1.0.7"
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+  className: nginx
+  host: lap.local
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "1m"
+    nginx.ingress.kubernetes.io/limit-rps: "20"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "5"
+  tls:
+    enabled: false
+    secretName: lap-tls
+
+config:
+  LAP_PROXY_HEADERS: "1"
+  LAP_FORWARDED_ALLOW_IPS: "*"
+  LAP_ALLOW_EPHEMERAL_SIGNING_KEYS: "0"
+  LAP_MAX_REQUEST_BYTES: "1048576"
+  LAP_RATE_LIMIT_SESSION_NEW: "30/m"
+  LAP_RATE_LIMIT_MINT_T3: "60/m"
+  LAP_RATE_LIMIT_EXTERNAL_APPROVAL: "60/m"
+  LAP_RATE_LIMIT_MAX_KEYS: "20000"
+  LAP_SESSION_TTL_MIN_SECONDS: "60"
+  LAP_SESSION_TTL_MAX_SECONDS: "86400"
+  LAP_MAX_ACTIVE_SESSIONS_PER_AGENT: "10"
+  LAP_MAX_ACTIVE_SESSIONS_GLOBAL: "10000"
+  LAP_ENABLE_PROTOCOL_ENGINE: "0"
+
+secrets:
+  # Provide these via `--set-file` or override with an existing Secret.
+  existingSecretName: ""
+  signingKey: ""
+  apiKeysJson: ""
+  trustedReviewerKeysJson: ""
+
+networkPolicy:
+  enabled: true
+

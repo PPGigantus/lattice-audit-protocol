@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lap-gateway
+  namespace: lap-system
+  labels:
+    app.kubernetes.io/name: lap-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: lap-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: lap-gateway
+    spec:
+      containers:
+        - name: gateway
+          # Replace with your published gateway image
+          image: your-registry/lap-gateway:1.4.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            # Default is builtin PDP. Override only if you want HTTP PDP mode.
+            - name: PDP_MODE
+              value: "builtin"
+            # If PDP_MODE=http, set PDP_URL to your PDP endpoint.
+            # - name: PDP_URL
+            #   value: "http://pdp:8181/v1/data/lap/decision"
+            - name: LAP_HTTP_BIND
+              value: "0.0.0.0"
+            - name: LAP_HTTP_PORT
+              value: "8000"
+          # Mount secrets/config as needed (signing keys, API keys, etc.)
+          # envFrom:
+          #   - secretRef:
+          #       name: lap-gateway-secrets
+          #   - configMapRef:
+          #       name: lap-gateway-config

@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: "LAP"
+    orgId: 1
+    folder: "LAP"
+    type: file
+    disableDeletion: true
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards

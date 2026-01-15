@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: only-gateway-can-call-tools
+  namespace: lap-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: lap-tool
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: lap-gateway
+      ports:
+        - protocol: TCP
+          port: 9000

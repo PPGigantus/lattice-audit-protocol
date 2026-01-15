@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lap-gateway
+  namespace: lap-system
+  annotations:
+    # For NGINX Ingress Controller (adjust if using another controller)
+    nginx.ingress.kubernetes.io/proxy-body-size: "1m"
+    nginx.ingress.kubernetes.io/limit-rps: "20"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "5"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: lap.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lap-gateway
+                port:
+                  number: 8000
+  # TLS config depends on your cert manager / secret
+  # tls:
+  #   - hosts:
+  #       - lap.local
+  #     secretName: lap-tls

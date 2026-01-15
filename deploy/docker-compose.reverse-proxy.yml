@@ -1,0 +1,66 @@
+services:
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: lap-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/snippets:/etc/nginx/snippets:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost/v1/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - edge_net
+      - gateway_net
+
+  gateway:
+    build:
+      context: ..
+      dockerfile: demo/Dockerfile.gateway
+    container_name: lap-gateway
+    env_file:
+      - ../.env
+    environment:
+      # Force uvicorn to trust proxy headers when behind nginx.
+      - LAP_PROXY_HEADERS=${LAP_PROXY_HEADERS:-1}
+      - LAP_FORWARDED_ALLOW_IPS=${LAP_FORWARDED_ALLOW_IPS:-*}
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/v1/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+    networks:
+      - gateway_net
+      - tool_net
+
+  # Optional: include a tool service on a private network.
+  # tool:
+  #   build:
+  #     context: ../demo/tool
+  #     dockerfile: Dockerfile
+  #   container_name: lap-tool
+  #   environment:
+  #     - TOOL_API_KEY=${LAP_HTTP_TOOL_API_KEY:-}
+  #   networks:
+  #     - tool_net
+
+networks:
+  edge_net:
+    driver: bridge
+  gateway_net:
+    driver: bridge
+  tool_net:
+    driver: bridge

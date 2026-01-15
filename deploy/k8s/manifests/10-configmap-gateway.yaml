@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lap-gateway-config
+  namespace: lap-system
+data:
+  LAP_PROXY_HEADERS: "1"
+  LAP_FORWARDED_ALLOW_IPS: "*"
+  LAP_ALLOW_EPHEMERAL_SIGNING_KEYS: "0"
+  LAP_MAX_REQUEST_BYTES: "1048576"
+  LAP_RATE_LIMIT_SESSION_NEW: "30/m"
+  LAP_RATE_LIMIT_MINT_T3: "60/m"
+  LAP_RATE_LIMIT_EXTERNAL_APPROVAL: "60/m"
+  LAP_RATE_LIMIT_MAX_KEYS: "20000"
+  LAP_SESSION_TTL_MIN_SECONDS: "60"
+  LAP_SESSION_TTL_MAX_SECONDS: "86400"
+  LAP_MAX_ACTIVE_SESSIONS_PER_AGENT: "10"
+  LAP_MAX_ACTIVE_SESSIONS_GLOBAL: "10000"
+  # Enable the LAP protocol engine path only if you are ready for policy changes.
+  LAP_ENABLE_PROTOCOL_ENGINE: "0"

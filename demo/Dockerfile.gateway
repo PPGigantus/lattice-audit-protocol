@@ -1,0 +1,19 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install runtime deps for the gateway
+COPY pyproject.toml /app/pyproject.toml
+COPY README.md /app/README.md
+COPY lap_gateway /app/lap_gateway
+COPY lap_cli.py /app/lap_cli.py
+COPY lattice_audit_v1_7.py /app/lattice_audit_v1_7.py
+COPY lap_verify.py /app/lap_verify.py
+COPY __init__.py /app/__init__.py
+
+RUN pip install --no-cache-dir -U pip \
+ && pip install --no-cache-dir ".[gateway]"
+
+EXPOSE 8000
+
+CMD ["lap-gateway", "--host", "0.0.0.0", "--port", "8000"]
