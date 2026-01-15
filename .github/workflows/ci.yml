@@ -1,0 +1,146 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Forbidden artifacts guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          bad=$(find . -maxdepth 4 \(
+            -name '__pycache__' -o 
+            -name '*.pyc' -o 
+            -name 'lap_gateway.db' -o 
+            -name 'lap_gateway.audit.jsonl' -o 
+            -path './demo/out*' -o 
+            -path './dist*' -o 
+            -path './build*' -o 
+            -path '*/*.egg-info*' \) -print | head -n 1 || true)
+          if [ -n "$bad" ]; then
+            echo "::error::Forbidden artifact present in repo checkout: $bad"
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install deps
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Compile
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q .
+
+      - name: Run tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          pytest -q
+
+      - name: Security scan (bandit)
+        if: ${{ matrix.python-version == '3.11' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Focus on shipped code paths; exclude tests/demo/deploy artifacts.
+          bandit -q -r \
+            lap_gateway \
+            lap_cli.py lap_verify.py lap_schema_validate.py lattice_audit_v1_7.py \
+            -x tests,demo,deploy,go,spec,scripts
+
+      - name: Dependency vulnerability scan (pip-audit)
+        if: ${{ matrix.python-version == '3.11' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Audit the resolved environment after installing project extras.
+          pip-audit -q
+
+      - name: Schema validate (spot check)
+        if: ${{ matrix.python-version == '3.11' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m lap_schema_validate spec/schemas/receipt.schema.json
+
+      - name: Demo + audit-pack smoke
+        if: ${{ matrix.python-version == '3.11' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python demo/run_demo.py
+
+      - name: PR014 load/chaos smoke (fail-closed)
+        if: ${{ matrix.python-version == '3.11' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/load_test.py --calls 25 --verify --chaos none
+          python scripts/load_test.py --chaos pdp-timeout
+          python scripts/load_test.py --chaos signer-down
+          python scripts/load_test.py --chaos storage-lockdown
+
+      - name: Clean tree before building artifacts
+        if: ${{ matrix.python-version == '3.11' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/clean_tree.sh
+
+      - name: Build sdist/wheel
+        if: ${{ matrix.python-version == '3.11' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade build
+          python -m build
+
+      - name: Generate SBOM (CycloneDX)
+        if: ${{ matrix.python-version == '3.11' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade cyclonedx-bom
+          cyclonedx-py -o sbom.cdx.json
+
+      - name: Upload SBOM artifact
+        if: ${{ matrix.python-version == '3.11' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx
+          path: sbom.cdx.json
+
+      - name: Install wheel and smoke
+        if: ${{ matrix.python-version == '3.11' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install dist/*.whl
+          lap --help
+          lap-verify --help
+          python -c "import lap_gateway; print('lap_gateway', lap_gateway.__version__)"
