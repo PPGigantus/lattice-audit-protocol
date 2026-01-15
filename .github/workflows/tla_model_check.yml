@@ -1,0 +1,39 @@
+name: TLA+ model check
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: tla-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tlc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Download tla2tools.jar
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="v1.8.0"
+          URL="https://github.com/tlaplus/tlaplus/releases/download/${VERSION}/tla2tools.jar"
+          EXPECTED_SHA1="7fa3616a73427cb8d1acc1c72b1fcbb98cc1e316"
+          echo "Downloading: ${URL}"
+          curl -fsSL -L "${URL}" -o tla2tools.jar
+          echo "${EXPECTED_SHA1}  tla2tools.jar" > tla2tools.jar.sha1
+          sha1sum -c tla2tools.jar.sha1
+
+      - name: Run TLC
+        shell: bash
+        run: |
+          set -euo pipefail
+          java -cp tla2tools.jar tlc2.TLC -config spec/BudgetInvariants.cfg spec/BudgetInvariants.tla
