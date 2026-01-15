@@ -260,20 +260,34 @@ class EvidenceQualityChecker:
         
         # Check description
         description = evidence.get("description", "")
+        if not isinstance(description, str):
+            issues.append("INVALID_FIELD_TYPE: description must be string")
+            description = ""
         issues.extend(self._check_text_quality(
             description, "description", min_desc_len
         ))
-        
+
         # Check reversibility plan
         irr = evidence.get("irreversibility", {})
-        rev_plan = irr.get("reversibility_plan", "") if isinstance(irr, dict) else ""
+        if not isinstance(irr, dict):
+            issues.append("INVALID_FIELD_TYPE: irreversibility must be object")
+            irr = {}
+        rev_plan = irr.get("reversibility_plan", "")
+        if not isinstance(rev_plan, str):
+            issues.append("INVALID_FIELD_TYPE: irreversibility.reversibility_plan must be string")
+            rev_plan = ""
         if tier in ("T2_HIGH_STAKES", "T3_CATASTROPHIC"):
             issues.extend(self._check_text_quality(
                 rev_plan, "reversibility_plan", min_rev_plan_len
             ))
-        
+
         # Check alternatives
         alternatives = evidence.get("alternatives", [])
+        if alternatives is None:
+            alternatives = []
+        if not isinstance(alternatives, list):
+            issues.append("INVALID_FIELD_TYPE: alternatives must be list")
+            alternatives = []
         if len(alternatives) < min_alts:
             issues.append(
                 f"INSUFFICIENT_ALTERNATIVES: {len(alternatives)} provided, "
@@ -281,7 +295,14 @@ class EvidenceQualityChecker:
             )
         
         for i, alt in enumerate(alternatives):
-            alt_desc = alt.get("description", "") if isinstance(alt, dict) else ""
+            if not isinstance(alt, dict):
+                issues.append(f"INVALID_FIELD_TYPE: alternative[{i}] must be object")
+                alt_desc = ""
+            else:
+                alt_desc = alt.get("description", "")
+            if not isinstance(alt_desc, str):
+                issues.append(f"INVALID_FIELD_TYPE: alternative[{i}].description must be string")
+                alt_desc = ""
             alt_issues = self._check_text_quality(
                 alt_desc, f"alternative[{i}].description",
                 self.policy.min_alternative_description_length
@@ -291,8 +312,11 @@ class EvidenceQualityChecker:
         # Check required non-empty fields
         for field in self.policy.required_nonempty_fields:
             value = evidence.get(field, "")
-            if not value or (isinstance(value, str) and not value.strip()):
+            if value is None or (isinstance(value, str) and not value.strip()):
                 issues.append(f"MISSING_REQUIRED_FIELD: {field}")
+                continue
+            if not isinstance(value, str):
+                issues.append(f"INVALID_FIELD_TYPE: {field} must be string")
         
         # Check for placeholder patterns
         placeholder_issues = check_placeholder_patterns(description)
@@ -325,6 +349,7 @@ class EvidenceQualityChecker:
         fatal_prefixes = (
             "MISSING_REQUIRED_FIELD:",
             "EMPTY_FIELD:",
+            "INVALID_FIELD_TYPE:",
         )
         fatal = [i for i in issues if i.startswith(fatal_prefixes)]
         override = [i for i in issues if not i.startswith(fatal_prefixes)]
