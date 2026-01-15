@@ -1,0 +1,23 @@
+# Exclude local/runtime artifacts and build/test junk from sdists
+
+global-exclude *.py[cod]
+global-exclude *.db
+global-exclude *.sqlite
+global-exclude *.sqlite3
+
+exclude lap_gateway.audit.jsonl
+
+prune demo/out
+prune .pytest_cache
+prune .ruff_cache
+prune .mypy_cache
+prune htmlcov
+
+exclude .coverage
+
+# Packaging/build outputs
+prune dist
+prune build
+prune .venv
+prune venv
+recursive-exclude *.egg-info *

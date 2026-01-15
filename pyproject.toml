@@ -1,0 +1,115 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lattice-audit-protocol"
+version = "1.4.1"
+description = "A governance framework for high-stakes action selection with gateway enforcement (PEP)"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Dave Gallop", email = "ppgigantus@example.com"}
+]
+keywords = [
+    "ai-safety",
+    "governance",
+    "audit",
+    "alignment",
+    "capability-tokens",
+    "ed25519",
+    "pep",
+    "policy-enforcement-point"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security",
+]
+requires-python = ">=3.9"
+dependencies = []
+
+[project.optional-dependencies]
+performance = ["numpy>=1.20"]
+
+# Gateway/PEP dependencies (Policy Enforcement Point)
+gateway = [
+    "cryptography>=41.0",
+    "fastapi>=0.100",
+    "uvicorn>=0.22",
+    "pydantic>=2.0",
+    "prometheus-client>=0.20",
+    "jsonschema>=4.0",
+]
+
+# Ed25519 only (no web server)
+crypto = ["cryptography>=41.0"]
+
+# NTP time verification for escrow
+ntp = ["ntplib>=0.4"]
+
+# Full installation with all features including PEP
+full = [
+    "numpy>=1.20",
+    "cryptography>=41.0",
+    "fastapi>=0.100",
+    "uvicorn>=0.22",
+    "pydantic>=2.0",
+    "ntplib>=0.4",
+    "jsonschema>=4.0",
+]
+
+# Developer tooling (lint/type/security/test)
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "httpx>=0.24",
+    "jsonschema>=4.0",
+    "ruff>=0.6.0",
+    "pyright>=1.1.380",
+    "pre-commit>=3.7",
+    "bandit>=1.7.9",
+    "pip-audit>=2.7.3",
+]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+
+[tool.ruff.lint]
+# Keep CI gates focused on correctness and low-noise hygiene.
+select = ["E9", "F", "I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["lap_gateway", "lattice_audit_v1_7", "lap_cli", "lap_verify", "lap_schema_validate"]
+
+[project.scripts]
+lap = "lap_cli:main"
+lap-gateway = "lap_gateway.server:main"
+lap-gateway-runner = "lap_gateway.runner:main"
+lap-verify = "lap_verify:main"
+lap-conformance = "lap_conformance:main"
+
+[project.urls]
+Homepage = "https://github.com/ppgigantus/lattice-audit-protocol"
+Repository = "https://github.com/ppgigantus/lattice-audit-protocol"
+
+[tool.setuptools]
+py-modules = ["lattice_audit_v1_7", "lap_cli", "lap_verify", "lap_schema_validate"]
+
+[tool.setuptools.packages.find]
+include = ["lap_gateway", "lap_gateway.*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["."]
+asyncio_mode = "auto"

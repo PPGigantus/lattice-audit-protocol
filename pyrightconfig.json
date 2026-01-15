@@ -1,0 +1,13 @@
+{
+  "pythonVersion": "3.9",
+  "typeCheckingMode": "basic",
+  "reportMissingImports": false,
+  "reportMissingTypeStubs": false,
+  "exclude": [
+    "**/__pycache__",
+    ".pytest_cache",
+    "demo",
+    "deploy",
+    "spec"
+  ]
+}
