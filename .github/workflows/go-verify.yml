@@ -1,0 +1,43 @@
+name: Go Verifier
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: go-verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  go-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go/lapverify/go.mod
+          cache: true
+          cache-dependency-path: |
+            go/lapverify/go.sum
+
+      - name: Go tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd go/lapverify
+          go test ./...
+
+      - name: Verify test vectors
+        shell: bash
+        run: |
+          set -euo pipefail
+          go run ./go/lapverify/cmd/lapverify vectors spec/test_vectors
+
+      - name: Verify golden audit pack
+        shell: bash
+        run: |
+          set -euo pipefail
+          go run ./go/lapverify/cmd/lapverify audit-pack spec/golden_packs/golden_pack_basic.zip --require-invocations
