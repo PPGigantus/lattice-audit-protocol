@@ -1,0 +1,12 @@
+{
+  "description": "v2 unicode test",
+  "timestamp_utc": "2026-01-01T00:00:00Z",
+  "action_id": "TV_ACTION_V2_UNICODE",
+  "irreversibility": {"score": 0.0},
+  "payload": {
+    "text": "café",
+    "emoji": "😄",
+    "cjk": "漢字",
+    "mixed": ["naïve", "кофе"]
+  }
+}

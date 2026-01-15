@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/lap/profile_attestation.schema.json",
+  "title": "LAP Profile Attestation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile", "version", "enforcement", "identity", "boundary", "signing"],
+  "properties": {
+    "profile": {"type": "string", "enum": ["bronze", "silver", "gold"]},
+    "version": {"type": "string", "minLength": 1},
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string"},
+        "commit": {"type": "string"},
+        "build": {"type": "string"}
+      }
+    },
+    "enforcement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tokens", "replay", "budgets", "sessions", "receipts", "audit_log"],
+      "properties": {
+        "tokens": {"type": "boolean"},
+        "replay": {"type": "boolean"},
+        "budgets": {"type": "boolean"},
+        "sessions": {"type": "boolean"},
+        "receipts": {"type": "boolean"},
+        "audit_log": {"type": "boolean"}
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": {"type": "string", "enum": ["api_key", "oidc", "mtls", "other"]},
+        "details": {"type": "string"}
+      }
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tools_not_directly_reachable", "tool_credentials_held_by_gateway"],
+      "properties": {
+        "tools_not_directly_reachable": {"type": "boolean"},
+        "tool_credentials_held_by_gateway": {"type": "boolean"},
+        "agent_egress_restricted": {"type": "boolean"}
+      }
+    },
+    "signing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["keyset", "external_signer"],
+      "properties": {
+        "keyset": {"type": "boolean"},
+        "external_signer": {"type": "boolean"},
+        "rotation_supported": {"type": "boolean"}
+      }
+    },
+    "approvals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "t3_requires_multi_party": {"type": "boolean"},
+        "reviewer_keyset_configured": {"type": "boolean"}
+      }
+    }
+  }
+}

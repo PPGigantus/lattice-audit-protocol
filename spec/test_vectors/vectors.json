@@ -1,0 +1,99 @@
+{
+  "format": "lap-test-vectors",
+  "version": 1,
+  "note": "Deterministic vectors. Do not edit by hand; re-run generator.",
+  "cases": [
+    {
+      "name": "evidence_hash_basic",
+      "type": "evidence_hash",
+      "input_file": "evidence_basic.json",
+      "expected": "549549de571e74467645b1aa3d963f886c571d1da030e40e26a474ee84f42d84"
+    },
+    {
+      "name": "decision_hash_basic",
+      "type": "decision_hash",
+      "input_file": "decision_basic.json",
+      "action_id": "TV_ACTION_001",
+      "evidence_hash": "549549de571e74467645b1aa3d963f886c571d1da030e40e26a474ee84f42d84",
+      "expected": "c3b2c0f61de0768245cee098220448eb7c9cb2c10592358dc0f3be1513aecc50"
+    },
+    {
+      "name": "params_hash_basic",
+      "type": "params_hash",
+      "input_file": "params_basic.json",
+      "expected": "0962f6d50cb42f76f5665b5759af5e1b291c84bdd21f4a71d10f6b07598cefac"
+    },
+    {
+      "name": "token_signature_basic_with_keyset",
+      "type": "token_verify",
+      "token_file": "token_basic.json",
+      "trusted_keys": {
+        "tv_gateway_new": "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8",
+        "tv_gateway_old": "29acbae141bccaf0b22e1a94d34d0bc7361e526d0bfe12c89794bc9322966dd7"
+      },
+      "expect_ok": true
+    },
+    {
+      "name": "token_signature_rotated_old_only",
+      "type": "token_verify",
+      "token_file": "token_old.json",
+      "trusted_keys": {
+        "tv_gateway_old": "29acbae141bccaf0b22e1a94d34d0bc7361e526d0bfe12c89794bc9322966dd7"
+      },
+      "expect_ok": true
+    },
+    {
+      "name": "token_signature_rotated_old_with_keyset",
+      "type": "token_verify",
+      "token_file": "token_old.json",
+      "trusted_keys": {
+        "tv_gateway_new": "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8",
+        "tv_gateway_old": "29acbae141bccaf0b22e1a94d34d0bc7361e526d0bfe12c89794bc9322966dd7"
+      },
+      "expect_ok": true
+    },
+    {
+      "name": "receipt_signature_and_hash_basic_with_keyset",
+      "type": "receipt_verify",
+      "receipt_file": "receipt_basic.json",
+      "trusted_keys": {
+        "tv_gateway_new": "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8",
+        "tv_gateway_old": "29acbae141bccaf0b22e1a94d34d0bc7361e526d0bfe12c89794bc9322966dd7"
+      },
+      "expected_receipt_hash": "6391ce9aa59bfa5fe6896693551da465cd9c7a9059eee2f42b4c3a5e728c8292"
+    },
+    {
+      "name": "receipt_signature_and_hash_rotated_old_only",
+      "type": "receipt_verify",
+      "receipt_file": "receipt_old.json",
+      "trusted_keys": {
+        "tv_gateway_old": "29acbae141bccaf0b22e1a94d34d0bc7361e526d0bfe12c89794bc9322966dd7"
+      },
+      "expected_receipt_hash": "9183d27d0679d7774ca6cac4995bb20da5886c37ab0a99c466ad6cf6ab1bee6c"
+    },
+    {
+      "name": "receipt_signature_and_hash_rotated_old_with_keyset",
+      "type": "receipt_verify",
+      "receipt_file": "receipt_old.json",
+      "trusted_keys": {
+        "tv_gateway_new": "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8",
+        "tv_gateway_old": "29acbae141bccaf0b22e1a94d34d0bc7361e526d0bfe12c89794bc9322966dd7"
+      },
+      "expected_receipt_hash": "9183d27d0679d7774ca6cac4995bb20da5886c37ab0a99c466ad6cf6ab1bee6c"
+    },
+    {
+      "name": "audit_pack_basic_zip",
+      "type": "audit_pack_verify",
+      "path": "../golden_packs/golden_pack_basic.zip",
+      "require_invocations": true,
+      "expect_ok": true
+    },
+    {
+      "name": "audit_pack_spliced_zip",
+      "type": "audit_pack_verify",
+      "path": "../golden_packs/golden_pack_spliced.zip",
+      "require_invocations": true,
+      "expect_ok": false
+    }
+  ]
+}

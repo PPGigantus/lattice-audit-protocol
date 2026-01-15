@@ -1,0 +1,21 @@
+{
+  "profile": "gold",
+  "version": "1.3.0",
+  "implementation": {"name": "lap-pep-gateway", "commit": "unknown"},
+  "enforcement": {
+    "tokens": true,
+    "replay": true,
+    "budgets": true,
+    "sessions": true,
+    "receipts": true,
+    "audit_log": true
+  },
+  "identity": {"mode": "oidc", "details": "JWT via enterprise IdP"},
+  "boundary": {
+    "tools_not_directly_reachable": true,
+    "tool_credentials_held_by_gateway": true,
+    "agent_egress_restricted": true
+  },
+  "signing": {"keyset": true, "external_signer": true, "rotation_supported": true},
+  "approvals": {"t3_requires_multi_party": true, "reviewer_keyset_configured": true}
+}

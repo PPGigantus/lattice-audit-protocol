@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ppgigantus.github.io/lattice-audit-protocol/schemas/evidence.schema.json",
+  "title": "LAP Evidence Object",
+  "type": "object",
+  "required": ["action_id", "description", "timestamp_utc", "irreversibility"],
+  "properties": {
+    "action_id": {"type": "string", "minLength": 1},
+    "description": {"type": "string"},
+    "timestamp_utc": {"type": "string"},
+    "irreversibility": {
+      "type": "object",
+      "required": ["score"],
+      "properties": {
+        "score": {"type": "number"},
+        "reversibility_plan": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "alternatives": {"type": "array"},
+    "attestations": {"type": "array"},
+    "provenance": {"type": "object"}
+  },
+  "additionalProperties": true
+}

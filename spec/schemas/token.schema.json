@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ppgigantus.github.io/lattice-audit-protocol/schemas/token.schema.json",
+  "title": "LAP Capability Token",
+  "type": "object",
+  "required": ["jti", "sub", "iss", "action_id", "evidence_hash", "decision_hash", "tier", "allowed_tools", "allowed_ops", "budget", "iat", "exp", "signature", "key_id"],
+  "properties": {
+    "jti": {"type": "string"},
+    "sub": {"type": "string"},
+    "iss": {"type": "string"},
+    "action_id": {"type": "string"},
+    "evidence_hash": {"type": "string"},
+    "decision_hash": {"type": "string"},
+    "tier": {"type": "string"},
+    "allowed_tools": {"type": "array", "items": {"type": "string"}},
+    "allowed_ops": {"type": "array", "items": {"type": "string"}},
+    "budget": {"type": "object"},
+    "iat": {"type": "string"},
+    "exp": {"type": "string"},
+    "signature": {"type": "string"},
+    "key_id": {"type": "string"},
+    "params_hash": {"type": "string"},
+    "sid": {"type": "string"},
+    "nonce_required": {"type": "boolean"},
+    "counter_required": {"type": "boolean"}
+  },
+  "additionalProperties": true
+}

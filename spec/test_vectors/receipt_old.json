@@ -1,0 +1,22 @@
+{
+  "receipt_id": "tv_rcpt_OLD_0001",
+  "action_id": "TV_ACTION_001",
+  "evidence_hash": "549549de571e74467645b1aa3d963f886c571d1da030e40e26a474ee84f42d84",
+  "decision_hash": "c3b2c0f61de0768245cee098220448eb7c9cb2c10592358dc0f3be1513aecc50",
+  "token_jti": "tv_tok_OLD_0001",
+  "sid": "tv_sid_0001",
+  "tool_name": "mock_tool",
+  "operation": "execute",
+  "params_hash": "93e358d0a89e3ef39886929b351592df22dc44ebabda305d903cd83349e03e8b",
+  "decision_binding": "7c484e57be84321b2c1b39d927700fc84e7cf310bc2b7e958de4dd43b2bb84e2",
+  "result_hash": "a99ad9408d994e114fae8a0d85ce5878f3db7b3c88f306f6a2abec1fade80b54",
+  "response_hash": "dc54b6ef1cc9498b8116fb3029e479eb22aea405ea4b468b43f7aa4a2885e656",
+  "result_status": "success",
+  "invoked_at_utc": "2026-01-01T00:00:00+00:00",
+  "completed_at_utc": "2026-01-01T00:00:01+00:00",
+  "duration_ms": 1000,
+  "prev_receipt_hash": "",
+  "receipt_hash": "9183d27d0679d7774ca6cac4995bb20da5886c37ab0a99c466ad6cf6ab1bee6c",
+  "signature": "EgHSg9kSEVb7DWdRsIwwtK0xMiYSGWLHck3KrE5tNT2u0rkHtK+C8EeQsqNOvXT4c0cZvXkfHmFOLas9d3vrBA==",
+  "key_id": "tv_gateway_old"
+}

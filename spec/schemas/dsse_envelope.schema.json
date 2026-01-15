@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lattice-audit-protocol.dev/schemas/dsse_envelope.schema.json",
+  "title": "LAP DSSE-Style Envelope",
+  "type": "object",
+  "required": ["payloadType", "payload", "signatures"],
+  "properties": {
+    "payloadType": {
+      "type": "string",
+      "minLength": 1
+    },
+    "payload": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9+/]*={0,2}$"
+    },
+    "signatures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["keyid", "sig"],
+        "properties": {
+          "keyid": {"type": "string", "minLength": 1},
+          "sig": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9+/]*={0,2}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

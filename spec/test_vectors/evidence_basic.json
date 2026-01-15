@@ -1,0 +1,15 @@
+{
+  "action_id": "TV_ACTION_001",
+  "description": "Test-vector action (no real-world effect)",
+  "timestamp_utc": "2026-01-01T00:00:00+00:00",
+  "irreversibility": {
+    "score": 0.1,
+    "reversibility_plan": "noop"
+  },
+  "alternatives": [
+    {
+      "description": "do nothing"
+    }
+  ],
+  "attestations": []
+}

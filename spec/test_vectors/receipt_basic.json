@@ -1,0 +1,22 @@
+{
+  "receipt_id": "tv_rcpt_0001",
+  "action_id": "TV_ACTION_001",
+  "evidence_hash": "549549de571e74467645b1aa3d963f886c571d1da030e40e26a474ee84f42d84",
+  "decision_hash": "c3b2c0f61de0768245cee098220448eb7c9cb2c10592358dc0f3be1513aecc50",
+  "token_jti": "tv_tok_0001",
+  "sid": "tv_sid_0001",
+  "tool_name": "mock_tool",
+  "operation": "execute",
+  "params_hash": "93e358d0a89e3ef39886929b351592df22dc44ebabda305d903cd83349e03e8b",
+  "decision_binding": "668c907ce474862dff1dfde71879d73dfdbdca071b78ff4f4a1a4f2120f5fba1",
+  "result_hash": "a99ad9408d994e114fae8a0d85ce5878f3db7b3c88f306f6a2abec1fade80b54",
+  "response_hash": "dc54b6ef1cc9498b8116fb3029e479eb22aea405ea4b468b43f7aa4a2885e656",
+  "result_status": "success",
+  "invoked_at_utc": "2026-01-01T00:00:00+00:00",
+  "completed_at_utc": "2026-01-01T00:00:01+00:00",
+  "duration_ms": 1000,
+  "prev_receipt_hash": "",
+  "receipt_hash": "6391ce9aa59bfa5fe6896693551da465cd9c7a9059eee2f42b4c3a5e728c8292",
+  "signature": "n/3HEn2S5jXW94ykYt9HITYNblqu2oY1cmeh/h4reWo1hMNMzk9GStHLBaYEfUA8t71vBs3dV45sggYxT9ZNAA==",
+  "key_id": "tv_gateway_new"
+}

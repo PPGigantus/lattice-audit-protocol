@@ -1,0 +1,30 @@
+{
+  "jti": "tv_tok_0001",
+  "sub": "agent_tv_001",
+  "iss": "tv_gateway",
+  "action_id": "TV_ACTION_001",
+  "evidence_hash": "549549de571e74467645b1aa3d963f886c571d1da030e40e26a474ee84f42d84",
+  "decision_hash": "c3b2c0f61de0768245cee098220448eb7c9cb2c10592358dc0f3be1513aecc50",
+  "tier": "T1_SENSITIVE",
+  "allowed_tools": [
+    "mock_tool"
+  ],
+  "allowed_ops": [
+    "execute"
+  ],
+  "budget": {
+    "max_calls": 10,
+    "max_bytes_in": null,
+    "max_bytes_out": 1000000,
+    "max_spend_cents": null,
+    "max_duration_seconds": null
+  },
+  "iat": "2026-01-01T00:00:00+00:00",
+  "exp": "2026-01-01T01:00:00+00:00",
+  "signature": "YCktnZ83pPIDnqlqX3Ri539fGAagZ4qWsX2Y6ya0lUKDYYECmOsPsfDuSPN65vLbqlPnI/zkhKPhW/1icS6/BA==",
+  "key_id": "tv_gateway_new",
+  "params_hash": "",
+  "sid": "tv_sid_0001",
+  "nonce_required": false,
+  "counter_required": false
+}

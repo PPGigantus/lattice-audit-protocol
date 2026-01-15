@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/lap/params.schema.json",
+  "title": "Tool Params",
+  "description": "Generic tool parameters object. LAP does not standardize tool-specific params; this schema intentionally allows any object.",
+  "type": "object",
+  "additionalProperties": true
+}

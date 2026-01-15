@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ppgigantus.github.io/lattice-audit-protocol/schemas/external_approval.schema.json",
+  "title": "LAP External Approval",
+  "type": "object",
+  "required": ["action_id", "evidence_hash", "role", "approved_by", "signature", "key_id"],
+  "properties": {
+    "action_id": {"type": "string"},
+    "evidence_hash": {"type": "string"},
+    "role": {"type": "string"},
+    "approved_by": {"type": "string"},
+    "created_at_utc": {"type": "string"},
+    "signature": {"type": "string"},
+    "key_id": {"type": "string"}
+  },
+  "additionalProperties": true
+}

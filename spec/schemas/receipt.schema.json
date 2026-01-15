@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ppgigantus.github.io/lattice-audit-protocol/schemas/receipt.schema.json",
+  "title": "LAP Tool Invocation Receipt",
+  "type": "object",
+  "required": [
+    "receipt_id",
+    "action_id",
+    "evidence_hash",
+    "decision_hash",
+    "token_jti",
+    "tool_name",
+    "operation",
+    "params_hash",
+    "result_hash",
+    "response_hash",
+    "result_status",
+    "invoked_at_utc",
+    "completed_at_utc",
+    "duration_ms",
+    "prev_receipt_hash",
+    "signature",
+    "key_id"
+  ],
+  "properties": {
+    "receipt_id": {
+      "type": "string"
+    },
+    "action_id": {
+      "type": "string"
+    },
+    "evidence_hash": {
+      "type": "string"
+    },
+    "decision_hash": {
+      "type": "string"
+    },
+    "token_jti": {
+      "type": "string"
+    },
+    "tool_name": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "params_hash": {
+      "type": "string"
+    },
+    "result_hash": {
+      "type": "string"
+    },
+    "response_hash": {
+      "type": "string"
+    },
+    "result_status": {
+      "type": "string"
+    },
+    "invoked_at_utc": {
+      "type": "string"
+    },
+    "completed_at_utc": {
+      "type": "string"
+    },
+    "duration_ms": {
+      "type": "integer"
+    },
+    "prev_receipt_hash": {
+      "type": "string"
+    },
+    "receipt_hash": {
+      "type": "string"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "key_id": {
+      "type": "string"
+    },
+    "decision_binding": {
+      "type": "string",
+      "description": "SHA-256 hex binding decision_hash + token_jti + action_id + tool_name + params_hash (included for receipt_profile=v2).",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": true
+}

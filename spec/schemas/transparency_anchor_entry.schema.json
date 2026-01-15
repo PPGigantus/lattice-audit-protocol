@@ -1,0 +1,39 @@
+{
+  "$id": "https://ppgigantus.github.io/lattice-audit-protocol/schemas/transparency_anchor_entry.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "artifact_type": {
+      "enum": [
+        "receipt",
+        "attestation",
+        "auditpack"
+      ],
+      "type": "string"
+    },
+    "gateway_id": {
+      "type": "string"
+    },
+    "key_id": {
+      "type": "string"
+    },
+    "signature": {
+      "pattern": "^[A-Za-z0-9+/=]+$",
+      "type": "string"
+    },
+    "timestamp_utc": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "timestamp_utc",
+    "artifact_type",
+    "artifact_hash"
+  ],
+  "title": "LAP Transparency Anchor Entry",
+  "type": "object"
+}

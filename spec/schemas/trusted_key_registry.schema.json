@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ppgigantus.github.io/lattice-audit-protocol/schemas/trusted_key_registry.schema.json",
+  "title": "LAP Trusted Key Registry",
+  "description": "Registry mapping key_id -> key entry with public_key_hex and status metadata.",
+  "type": "object",
+  "patternProperties": {
+    "^[A-Za-z0-9._-]{1,64}$": {
+      "type": "object",
+      "properties": {
+        "public_key_hex": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "revoked",
+            "inactive"
+          ]
+        },
+        "not_before_utc": {
+          "type": "string"
+        },
+        "not_after_utc": {
+          "type": "string"
+        },
+        "revoked": {
+          "type": "boolean"
+        },
+        "revoked_at_utc": {
+          "type": "string"
+        },
+        "revoked_reason": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "public_key_hex"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

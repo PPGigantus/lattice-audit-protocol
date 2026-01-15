@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ppgigantus.github.io/lattice-audit-protocol/schemas/decision.schema.json",
+  "title": "LAP Decision",
+  "type": "object",
+  "required": ["outcome", "tier", "reason"],
+  "properties": {
+    "action_id": {"type": "string"},
+    "outcome": {"type": "string"},
+    "tier": {"type": "string"},
+    "reason": {"type": "string"},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}

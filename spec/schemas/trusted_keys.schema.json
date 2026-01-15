@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ppgigantus.github.io/lattice-audit-protocol/schemas/trusted_keys.schema.json",
+  "title": "LAP Trusted Keys",
+  "description": "Map of key_id -> Ed25519 public_key_hex used to verify signatures in an audit pack. (supports either legacy map or wrapped registry with metadata).",
+  "oneOf": [
+    {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ppgigantus.github.io/lattice-audit-protocol/schemas/trusted_keys.schema.json",
+      "title": "LAP Trusted Keys",
+      "description": "Map of key_id -> Ed25519 public_key_hex used to verify signatures in an audit pack.",
+      "type": "object",
+      "patternProperties": {
+        "^[A-Za-z0-9._-]{1,64}$": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "integer"
+        },
+        "legacy_verify": {
+          "type": "boolean"
+        },
+        "keys": {
+          "type": "object",
+          "patternProperties": {
+            "^[A-Za-z0-9._-]{1,64}$": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-fA-F]{64}$"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "public_key_hex": {
+                      "type": "string",
+                      "pattern": "^[0-9a-fA-F]{64}$"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "not_before_utc": {
+                      "type": "string"
+                    },
+                    "not_after_utc": {
+                      "type": "string"
+                    },
+                    "revoked": {
+                      "type": "boolean"
+                    },
+                    "revoked_at_utc": {
+                      "type": "string"
+                    },
+                    "revoked_reason": {
+                      "type": "string"
+                    },
+                    "reason": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "public_key_hex"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "revoked": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "revocations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key_id": {
+                "type": "string"
+              },
+              "revoked_at_utc": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "key_id"
+            ],
+            "additionalProperties": true
+          }
+        }
+      },
+      "required": [
+        "keys"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

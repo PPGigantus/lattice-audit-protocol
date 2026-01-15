@@ -1,0 +1,14 @@
+{
+  "description": "v2 nested ordering test",
+  "timestamp_utc": "2026-01-01T00:00:00Z",
+  "payload": {
+    "z": 0,
+    "b": [
+      {"k2": "v2", "k1": "v1"},
+      3
+    ],
+    "a": {"y": 2, "x": 1}
+  },
+  "irreversibility": {"score": 0.0},
+  "action_id": "TV_ACTION_V2_NESTED"
+}
